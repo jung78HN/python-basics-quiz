@@ -60,4 +60,4 @@ python-basics-quiz/
 
 실제 실행에서 수집한 터미널 출력을 PNG로 정리했습니다.
 
-[개발 환경](docs/screenshots/environment.png) · [메뉴](docs/screenshots/menu.png) · [퀴즈 추가](docs/screenshots/add_quiz.png) · [퀴즈 목록](docs/screenshots/list.png) · [퀴즈 풀이](docs/screenshots/play.png) · [최고 점수와 재시작](docs/screenshots/score.png)
+[개발 환경](docs/screenshots/environment.png) · [메뉴](docs/screenshots/menu.png) · [퀴즈 추가](docs/screenshots/add_quiz.png) · [퀴즈 목록](docs/screenshots/list.png) · [퀴즈 풀이](docs/screenshots/play.png) · [최고 점수와 재시작](docs/screenshots/score.png) · [Git 커밋과 병합 그래프](docs/screenshots/git-log.png)
