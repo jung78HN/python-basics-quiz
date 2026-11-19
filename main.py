@@ -24,87 +24,86 @@ def read_text(prompt: str) -> str:
         print("공백을 제외한 내용을 입력하세요.")
 
 
-def show_menu() -> None:
-    print("\n=== Python 기초 퀴즈 ===")
-    print("1. 퀴즈 풀기")
-    print("2. 퀴즈 추가")
-    print("3. 퀴즈 목록")
-    print("4. 점수 확인")
-    print("5. 종료")
+class QuizGame:
+    """메뉴 흐름, 문제 목록과 최고 점수를 관리한다."""
 
+    def __init__(self):
+        self.quizzes = default_quizzes()
+        self.best_score: int | None = None
 
-def play(quizzes: list[Quiz]) -> int | None:
-    if not quizzes:
-        print("\n등록된 퀴즈가 없습니다.")
-        return
+    def show_menu(self) -> None:
+        print("\n=== Python 기초 퀴즈 ===")
+        print("1. 퀴즈 풀기")
+        print("2. 퀴즈 추가")
+        print("3. 퀴즈 목록")
+        print("4. 점수 확인")
+        print("5. 종료")
 
-    correct = 0
-    total = len(quizzes)
-    print(f"\n퀴즈를 시작합니다. 총 {total}문제입니다.")
-    for number, quiz in enumerate(quizzes, start=1):
-        quiz.display(number)
-        selected = read_number("정답 번호 (1~4): ", 1, 4)
-        if quiz.is_correct(selected):
-            correct += 1
-            print("정답입니다!")
-        else:
-            print(f"오답입니다. 정답은 {quiz.answer}번입니다.")
+    def run(self) -> None:
+        try:
+            while True:
+                self.show_menu()
+                choice = read_number("선택: ", 1, 5)
+                if choice == 5:
+                    break
+                elif choice == 1:
+                    self.play()
+                elif choice == 2:
+                    self.add_quiz()
+                elif choice == 3:
+                    self.show_quizzes()
+                else:
+                    self.show_score()
+        except (KeyboardInterrupt, EOFError):
+            print("\n입력이 중단되었습니다.")
+        print("퀴즈 게임을 종료합니다.")
 
-    score = round(correct / total * 100)
-    print(f"\n결과: {total}문제 중 {correct}문제 정답 ({score}점)")
-    return score
+    def play(self) -> None:
+        if not self.quizzes:
+            print("\n등록된 퀴즈가 없습니다.")
+            return None
 
-
-def add_quiz(quizzes: list[Quiz]) -> None:
-    print("\n새로운 퀴즈를 추가합니다.")
-    question = read_text("문제: ")
-    choices = [read_text(f"선택지 {number}: ") for number in range(1, 5)]
-    answer = read_number("정답 번호 (1~4): ", 1, 4)
-    quizzes.append(Quiz(question, choices, answer))
-    print("퀴즈가 추가되었습니다.")
-
-
-def show_quizzes(quizzes: list[Quiz]) -> None:
-    if not quizzes:
-        print("\n등록된 퀴즈가 없습니다.")
-        return
-
-    print(f"\n등록된 퀴즈 목록 (총 {len(quizzes)}개)")
-    for number, quiz in enumerate(quizzes, start=1):
-        print(f"  {number}. {quiz.question}")
-
-
-def show_score(best_score: int | None) -> None:
-    if best_score is None:
-        print("\n아직 완료한 퀴즈가 없습니다.")
-    else:
-        print(f"\n최고 점수: {best_score}점")
-
-
-def main() -> None:
-    quizzes = default_quizzes()
-    best_score = None
-    try:
-        while True:
-            show_menu()
-            choice = read_number("선택: ", 1, 5)
-            if choice == 5:
-                break
-            elif choice == 1:
-                score = play(quizzes)
-                if score is not None and (best_score is None or score > best_score):
-                    best_score = score
-                    print("새로운 최고 점수입니다!")
-            elif choice == 2:
-                add_quiz(quizzes)
-            elif choice == 3:
-                show_quizzes(quizzes)
+        correct = 0
+        total = len(self.quizzes)
+        print(f"\n퀴즈를 시작합니다. 총 {total}문제입니다.")
+        for number, quiz in enumerate(self.quizzes, start=1):
+            quiz.display(number)
+            selected = read_number("정답 번호 (1~4): ", 1, 4)
+            if quiz.is_correct(selected):
+                correct += 1
+                print("정답입니다!")
             else:
-                show_score(best_score)
-    except (KeyboardInterrupt, EOFError):
-        print("\n입력이 중단되었습니다.")
-    print("퀴즈 게임을 종료합니다.")
+                print(f"오답입니다. 정답은 {quiz.answer}번입니다.")
+
+        score = round(correct / total * 100)
+        print(f"\n결과: {total}문제 중 {correct}문제 정답 ({score}점)")
+        if self.best_score is None or score > self.best_score:
+            self.best_score = score
+            print("새로운 최고 점수입니다!")
+
+    def add_quiz(self) -> None:
+        print("\n새로운 퀴즈를 추가합니다.")
+        question = read_text("문제: ")
+        choices = [read_text(f"선택지 {number}: ") for number in range(1, 5)]
+        answer = read_number("정답 번호 (1~4): ", 1, 4)
+        self.quizzes.append(Quiz(question, choices, answer))
+        print("퀴즈가 추가되었습니다.")
+
+    def show_quizzes(self) -> None:
+        if not self.quizzes:
+            print("\n등록된 퀴즈가 없습니다.")
+            return
+
+        print(f"\n등록된 퀴즈 목록 (총 {len(self.quizzes)}개)")
+        for number, quiz in enumerate(self.quizzes, start=1):
+            print(f"  {number}. {quiz.question}")
+
+    def show_score(self) -> None:
+        if self.best_score is None:
+            print("\n아직 완료한 퀴즈가 없습니다.")
+        else:
+            print(f"\n최고 점수: {self.best_score}점")
 
 
 if __name__ == "__main__":
-    main()
+    QuizGame().run()
