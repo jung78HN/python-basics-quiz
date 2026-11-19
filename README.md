@@ -18,6 +18,8 @@ python main.py
 
 Windows에서 Python Launcher가 설치되어 있다면 `py -3 main.py`로도 실행할 수 있습니다.
 
+다른 폴더에서도 프로젝트의 main.py 경로를 지정해 실행할 수 있습니다.
+
 ## 기능
 
 | 메뉴 | 동작 |
