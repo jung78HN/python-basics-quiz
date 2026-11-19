@@ -33,7 +33,7 @@ def show_menu() -> None:
     print("5. 종료")
 
 
-def play(quizzes: list[Quiz]) -> None:
+def play(quizzes: list[Quiz]) -> int | None:
     if not quizzes:
         print("\n등록된 퀴즈가 없습니다.")
         return
@@ -52,6 +52,7 @@ def play(quizzes: list[Quiz]) -> None:
 
     score = round(correct / total * 100)
     print(f"\n결과: {total}문제 중 {correct}문제 정답 ({score}점)")
+    return score
 
 
 def add_quiz(quizzes: list[Quiz]) -> None:
@@ -73,8 +74,16 @@ def show_quizzes(quizzes: list[Quiz]) -> None:
         print(f"  {number}. {quiz.question}")
 
 
+def show_score(best_score: int | None) -> None:
+    if best_score is None:
+        print("\n아직 완료한 퀴즈가 없습니다.")
+    else:
+        print(f"\n최고 점수: {best_score}점")
+
+
 def main() -> None:
     quizzes = default_quizzes()
+    best_score = None
     try:
         while True:
             show_menu()
@@ -82,13 +91,16 @@ def main() -> None:
             if choice == 5:
                 break
             elif choice == 1:
-                play(quizzes)
+                score = play(quizzes)
+                if score is not None and (best_score is None or score > best_score):
+                    best_score = score
+                    print("새로운 최고 점수입니다!")
             elif choice == 2:
                 add_quiz(quizzes)
             elif choice == 3:
                 show_quizzes(quizzes)
             else:
-                print("아직 준비 중인 기능입니다.")
+                show_score(best_score)
     except (KeyboardInterrupt, EOFError):
         print("\n입력이 중단되었습니다.")
     print("퀴즈 게임을 종료합니다.")
