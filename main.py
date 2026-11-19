@@ -63,6 +63,16 @@ def add_quiz(quizzes: list[Quiz]) -> None:
     print("퀴즈가 추가되었습니다.")
 
 
+def show_quizzes(quizzes: list[Quiz]) -> None:
+    if not quizzes:
+        print("\n등록된 퀴즈가 없습니다.")
+        return
+
+    print(f"\n등록된 퀴즈 목록 (총 {len(quizzes)}개)")
+    for number, quiz in enumerate(quizzes, start=1):
+        print(f"  {number}. {quiz.question}")
+
+
 def main() -> None:
     quizzes = default_quizzes()
     try:
@@ -75,6 +85,8 @@ def main() -> None:
                 play(quizzes)
             elif choice == 2:
                 add_quiz(quizzes)
+            elif choice == 3:
+                show_quizzes(quizzes)
             else:
                 print("아직 준비 중인 기능입니다.")
     except (KeyboardInterrupt, EOFError):
